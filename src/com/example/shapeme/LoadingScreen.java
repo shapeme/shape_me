@@ -27,6 +27,7 @@ public class LoadingScreen extends Screen{
 		Assets.emptySquare = g.newPixmap("emptySquare.png", PixmapFormat.ARGB4444);
 		Assets.crossedSquare = g.newPixmap("crossedSquare.png", PixmapFormat.ARGB4444);
 		Assets.filledSquare = g.newPixmap("filledSquare.png", PixmapFormat.ARGB4444);
+		Assets.numberSquare = g.newPixmap("numberSquare.png", PixmapFormat.ARGB4444);
 		
 		/* Set the main menu screen. */
 		game.setScreen(new MainMenuScreen(game));

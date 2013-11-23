@@ -14,4 +14,5 @@ public class Assets {
 	public static Pixmap emptySquare;
 	public static Pixmap crossedSquare;
 	public static Pixmap filledSquare;
+	public static Pixmap numberSquare;
 }

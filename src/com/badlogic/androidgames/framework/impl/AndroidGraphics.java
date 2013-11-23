@@ -93,6 +93,12 @@ public class AndroidGraphics implements Graphics {
         paint.setStyle(Style.STROKE);
         canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
     }
+    
+    public void drawScaledPixmap(Pixmap pixmap, int x, int y, int width, int height) {
+    	Bitmap scaledBitmap = Bitmap.createScaledBitmap(((AndroidPixmap)pixmap).bitmap, width, height, false);
+    	
+    	canvas.drawBitmap(scaledBitmap, x, y, null);
+    }
 
     public void drawPixmap(Pixmap pixmap, int x, int y, int srcX, int srcY,
             int srcWidth, int srcHeight) {
@@ -105,7 +111,7 @@ public class AndroidGraphics implements Graphics {
         dstRect.top = y;
         dstRect.right = x + srcWidth - 1;
         dstRect.bottom = y + srcHeight - 1;
-
+        
         canvas.drawBitmap(((AndroidPixmap) pixmap).bitmap, srcRect, dstRect, null);
     }
 

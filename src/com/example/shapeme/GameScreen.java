@@ -8,11 +8,10 @@ import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.Screen;
 
 public class GameScreen extends Screen{
-	private Board board;
-	
+	private Level level;
 	public GameScreen(Game game) {
 		super(game);
-		board = new Board(30, 20);
+		level = new Level(20, 13);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -31,11 +30,11 @@ public class GameScreen extends Screen{
 			}
 			
 			/* Check if one of the squares was touched. */
-			for (int i = 0; i < board.getWidth(); ++i)
-				for (int j = 0; j < board.getHeight(); ++j)
-					if (currentEvent.type == TouchEvent.TOUCH_UP && this.inBounds(currentEvent, board.squares[i][j].getX(), board.squares[i][j].getY(), board.squares[i][j].getPixmap().getWidth(), board.squares[i][j].getPixmap().getHeight())) {
+			for (int i = 0; i < level.getBoardWidth(); ++i)
+				for (int j = 0; j < level.getBoardHeight(); ++j)
+					if (currentEvent.type == TouchEvent.TOUCH_DOWN && this.inBounds(currentEvent, level.getSquare(i, j).getX(), level.getSquare(i, j).getY(), level.getSquare(i, j).getPixmap().getWidth(), level.getSquare(i, j).getPixmap().getHeight())) {
 						/* Change the state for the touched square. */
-						board.squares[i][j].nextState();
+						level.getSquare(i, j).nextState();
 					}
 		}
 	}
@@ -49,10 +48,46 @@ public class GameScreen extends Screen{
 		g.drawPixmap(Assets.gameScreenBackground, 0, 0);
 
 		
-		/* Draw the squares. */
-		for (int i = 0; i < board.getWidth(); ++i)
-			for (int j = 0; j < board.getHeight(); ++j)
-				g.drawPixmap(board.squares[i][j].getPixmap(), board.squares[i][j].getX(), board.squares[i][j].getY());
+		/* Draw the play board squares. */
+		for (int i = 0; i < level.getBoardWidth(); ++i)
+			for (int j = 0; j < level.getBoardHeight(); ++j)
+				g.drawScaledPixmap(level.getSquare(i, j).getPixmap(), level.getSquare(i, j).getX(), level.getSquare(i, j).getY(), level.getSquareSize(), level.getSquareSize());
+		
+		/* Draw the number squares. */
+		
+		/* Under the board. */
+		int x = level.getLeftOffset();
+		int y = level.getSquare(0, level.getBoardHeight() - 1).getY() + level.getSquareSize();
+		for (int i = 0; i < level.getBoardWidth(); ++i) {
+			for (int j = 0; j < 5; ++j)
+				g.drawScaledPixmap(Assets.numberSquare, i * level.getSquareSize() + x, y + j * level.getSquareSize(), level.getSquareSize(), level.getSquareSize());
+		}
+		for (int i = 0; i < level.getBoardWidth(); ++i)
+			for (int j = 0; j < 5; ++j)
+				g.drawText("5", x + 10 + i * level.getSquareSize(), y  + (int)(level.getSquareSize() / 1.3) + level.getSquareSize() * j, level.getSquareSize() - 10);
+
+		
+		/* To the right of the board. */
+		x = level.getSquare(level.getBoardWidth() - 1, 0).getX() + level.getSquareSize();
+		y = level.getTopOffset();
+		for (int i = 0; i < 5; ++i) {
+			for (int j = 0; j < level.getBoardHeight(); ++j)
+				g.drawScaledPixmap(Assets.numberSquare, i * level.getSquareSize() + x, y + j * level.getSquareSize(), level.getSquareSize(), level.getSquareSize());
+		}
+		
+		for (int i = 0; i < 5; ++i)
+			for (int j = 0; j < level.getBoardHeight(); ++j)
+				g.drawText("5", x + 10 + i * level.getSquareSize(), y  + (int)(level.getSquareSize() / 1.3) + level.getSquareSize() * j, level.getSquareSize() - 10);
+		
+		/* Draw the empty squares in the right bottom corner of the board. */
+		x = level.getSquare(level.getBoardWidth() - 1, 0).getX() + level.getSquareSize();
+		y = level.getSquare(0, level.getBoardHeight() - 1).getY() + level.getSquareSize();
+		for (int i = 0; i < 5; ++i) {
+			for (int j = 0; j < 5; ++j)
+				g.drawScaledPixmap(Assets.emptySquare, i * level.getSquareSize() + x, y + j * level.getSquareSize(), level.getSquareSize(), level.getSquareSize());
+		}
+		
+		
 		
 		/* Draw the buttons. */
 		g.drawPixmap(Assets.backButton, 1700, 900);

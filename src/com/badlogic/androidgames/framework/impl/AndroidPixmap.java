@@ -13,7 +13,7 @@ public class AndroidPixmap implements Pixmap {
         this.bitmap = bitmap;
         this.format = format;
     }
-
+    
     public int getWidth() {
         return bitmap.getWidth();
     }
