@@ -9,14 +9,15 @@ import com.badlogic.androidgames.framework.Screen;
 
 public class GameScreen extends Screen{
 	private Level level;
-	public GameScreen(Game game) {
+	private boolean finished = false;
+	public GameScreen(Game game, int levelNumber){
 		super(game);
-		level = new Level(20, 13);
+		level = new Level(levelNumber);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update(float deltaTime){
 		// TODO Auto-generated method stub
 		/* Get the touch events. */
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
@@ -37,6 +38,9 @@ public class GameScreen extends Screen{
 						level.getSquare(i, j).nextState();
 					}
 		}
+		
+		if (level.finished())
+			this.finished = true;
 	}
 
 	@Override
@@ -64,7 +68,14 @@ public class GameScreen extends Screen{
 		}
 		for (int i = 0; i < level.getBoardWidth(); ++i)
 			for (int j = 0; j < 5; ++j)
-				g.drawText("5", x + 10 + i * level.getSquareSize(), y  + (int)(level.getSquareSize() / 1.3) + level.getSquareSize() * j, level.getSquareSize() - 10);
+				{
+					if (level.bottomNumbers[j][i] == 0)
+						continue;
+					else if (level.bottomNumbers[j][i] < 10)
+						g.drawText(Integer.toString(level.bottomNumbers[j][i]), x + 10 + i * level.getSquareSize(), y  + (int)(level.getSquareSize() / 1.3) + level.getSquareSize() * j, level.getSquareSize() - 10);
+					else
+						g.drawText(Integer.toString(level.bottomNumbers[j][i]), x + 1 + i * level.getSquareSize(), y  + (int)(level.getSquareSize() / 1.3) + level.getSquareSize() * j, level.getSquareSize() - 10);
+				}
 
 		
 		/* To the right of the board. */
@@ -77,7 +88,14 @@ public class GameScreen extends Screen{
 		
 		for (int i = 0; i < 5; ++i)
 			for (int j = 0; j < level.getBoardHeight(); ++j)
-				g.drawText("5", x + 10 + i * level.getSquareSize(), y  + (int)(level.getSquareSize() / 1.3) + level.getSquareSize() * j, level.getSquareSize() - 10);
+				{	
+					if (level.rightNumbers[j][i] == 0)
+						continue;
+					else if (level.rightNumbers[j][i] < 10)
+						g.drawText(Integer.toString(level.rightNumbers[j][i]), x + 10 + i * level.getSquareSize(), y  + (int)(level.getSquareSize() / 1.3) + level.getSquareSize() * j, level.getSquareSize() - 10);
+					else
+						g.drawText(Integer.toString(level.rightNumbers[j][i]), x + 1 + i * level.getSquareSize(), y  + (int)(level.getSquareSize() / 1.3) + level.getSquareSize() * j, level.getSquareSize() - 10);
+				}
 		
 		/* Draw the empty squares in the right bottom corner of the board. */
 		x = level.getSquare(level.getBoardWidth() - 1, 0).getX() + level.getSquareSize();
@@ -87,10 +105,11 @@ public class GameScreen extends Screen{
 				g.drawScaledPixmap(Assets.emptySquare, i * level.getSquareSize() + x, y + j * level.getSquareSize(), level.getSquareSize(), level.getSquareSize());
 		}
 		
-		
+		if (this.finished)
+			g.drawText("Congratulations!", 1500, 500, 50);
 		
 		/* Draw the buttons. */
-		g.drawPixmap(Assets.backButton, 1700, 900);
+		g.drawPixmap(Assets.backButton, 1600, 900);
 	}
 
 	@Override

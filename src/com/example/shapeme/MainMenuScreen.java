@@ -23,7 +23,7 @@ public class MainMenuScreen extends Screen {
 			
 			/* Check if the start game button was pressed. */
 			if (currentEvent.type == TouchEvent.TOUCH_UP && this.inBounds(currentEvent, 760, 340, Assets.startButton.getWidth(), Assets.startButton.getHeight())) {
-				game.setScreen(new GameScreen(game));
+				game.setScreen(new GameScreen(game, 1));
 			}
 			
 			/* Check if the tutorial button was pressed. */
